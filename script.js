@@ -30,19 +30,28 @@ function displayStocks() {
     stockList.innerHTML = '';
     stocks.forEach(stock => {
         const li = document.createElement('li');
-        li.textContent = `${stock.symbol}: ₹${stock.price.toFixed(2)}`;
+        li.innerHTML = `<strong>${stock.symbol}:</strong> ₹${stock.price.toFixed(2)} <span class="price-change"></span>`;
         stockList.appendChild(li);
     });
 }
 
 function updateStockPrices() {
-    stocks.forEach(stock => {
+    stocks.forEach((stock, index) => {
+        const previousPrice = stock.price;
         const randomChange = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 100);
         stock.price = Math.max(stock.price + randomChange, 0);
         stock.priceHistory.push(stock.price);
         if (stock.priceHistory.length > 60) {
             stock.priceHistory.shift();
         }
+        
+        const priceChange = stock.price - previousPrice;
+        const priceChangePercentage = (priceChange / previousPrice) * 100;
+        
+        const listItem = stockList.children[index];
+        const priceChangeElement = listItem.querySelector('.price-change');
+        priceChangeElement.textContent = ` ${priceChange >= 0 ? '▲' : '▼'} ${Math.abs(priceChangePercentage).toFixed(2)}%`;
+        priceChangeElement.style.color = priceChange >= 0 ? '#4CAF50' : '#F44336';
     });
     updateChart();
 }
@@ -57,14 +66,29 @@ function createChart() {
                 label: selectedStock.symbol,
                 data: selectedStock.priceHistory,
                 borderColor: '#00bcd4',
-                tension: 0.1
+                backgroundColor: 'rgba(0, 188, 212, 0.1)',
+                tension: 0.1,
+                fill: true
             }]
         },
         options: {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: false
+                    beginAtZero: false,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 }
             }
         }
@@ -81,13 +105,66 @@ function updateChart() {
 }
 
 function populateChartSelector() {
-    chartSelector.innerHTML = ''; // Clear existing options
+    chartSelector.innerHTML = '';
     stocks.forEach(stock => {
         const option = document.createElement('option');
         option.value = stock.symbol;
         option.textContent = stock.symbol;
         chartSelector.appendChild(option);
     });
+}
+
+function updateBalance() {
+    balanceElement.textContent = `Balance: ₹${balance.toFixed(2)}`;
+    document.getElementById('profile-balance').textContent = balance.toFixed(2);
+}
+
+function addStockToMyStocks(symbol, shares, purchasePrice) {
+    const existingStock = myStocks.find(s => s.symbol === symbol);
+    if (existingStock) {
+        existingStock.shares += shares;
+        existingStock.averagePrice = (existingStock.averagePrice * existingStock.shares + purchasePrice * shares) / (existingStock.shares + shares);
+    } else {
+        myStocks.push({ symbol: symbol, shares: shares, averagePrice: purchasePrice });
+    }
+    displayMyStocks();
+}
+
+function displayMyStocks() {
+    myStockList.innerHTML = '';
+    myStocks.forEach(stock => {
+        const currentPrice = stocks.find(s => s.symbol === stock.symbol).price;
+        const profitLoss = (currentPrice - stock.averagePrice) * stock.shares;
+        const profitLossPercentage = ((currentPrice - stock.averagePrice) / stock.averagePrice) * 100;
+        
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <strong>${stock.symbol}:</strong> ${stock.shares.toFixed(2)} shares
+            <br>Avg. Price: ₹${stock.averagePrice.toFixed(2)}
+            <br>Current Value: ₹${(currentPrice * stock.shares).toFixed(2)}
+            <br>P/L: <span style="color: ${profitLoss >= 0 ? '#4CAF50' : '#F44336'}">
+                ₹${profitLoss.toFixed(2)} (${profitLossPercentage.toFixed(2)}%)
+            </span>
+        `;
+        myStockList.appendChild(li);
+    });
+}
+
+function recordProfitLoss(symbol, purchasePrice, shares, salePrice) {
+    const totalCost = purchasePrice * shares;
+    const totalSale = salePrice * shares;
+    const profitLoss = totalSale - totalCost;
+    const profitLossPercentage = ((salePrice - purchasePrice) / purchasePrice) * 100;
+    
+    const li = document.createElement('li');
+    li.innerHTML = `
+        <strong>${symbol}:</strong> ${shares.toFixed(2)} shares
+        <br>Buy: ₹${purchasePrice.toFixed(2)} | Sell: ₹${salePrice.toFixed(2)}
+        <br><span style="color: ${profitLoss >= 0 ? '#4CAF50' : '#F44336'}">
+            ${profitLoss >= 0 ? 'Profit' : 'Loss'}: ₹${Math.abs(profitLoss).toFixed(2)} (${profitLossPercentage.toFixed(2)}%)
+        </span>
+    `;
+    profitLossList.appendChild(li);
 }
 
 chartSelector.addEventListener('change', () => {
@@ -131,7 +208,7 @@ document.getElementById('sell-button').addEventListener('click', () => {
             balance += saleAmount;
             updateBalance();
             stock.shares -= sellShares;
-            recordProfitLoss(stock.symbol, stock.purchasePrice, sellShares, stockPrice);
+            recordProfitLoss(stock.symbol, stock.averagePrice, sellShares, stockPrice);
             
             if (stock.shares === 0) {
                 myStocks = myStocks.filter(s => s.symbol !== stock.symbol);
@@ -147,44 +224,6 @@ document.getElementById('sell-button').addEventListener('click', () => {
         alert("You do not own this stock.");
     }
 });
-
-function recordProfitLoss(symbol, purchasePrice, shares, salePrice) {
-    const totalCost = purchasePrice * shares;
-    const totalSale = salePrice * shares;
-    const profitLoss = totalSale - totalCost;
-    const li = document.createElement('li');
-    li.textContent = `${shares} shares of ${symbol}: ${profitLoss >= 0 ? 'Profit' : 'Loss'} of ₹${Math.abs(profitLoss).toFixed(2)}`;
-    profitLossList.appendChild(li);
-}
-
-function updateBalance() {
-    balanceElement.textContent = `Balance: ₹${balance.toFixed(2)}`;
-    document.getElementById('profile-balance').textContent = balance.toFixed(2);
-}
-
-function addStockToMyStocks(symbol, shares, purchasePrice) {
-    const existingStock = myStocks.find(s => s.symbol === symbol);
-    if (existingStock) {
-        existingStock.shares += shares;
-    } else {
-        myStocks.push({ symbol: symbol, shares: shares, purchasePrice: purchasePrice });
-    }
-    displayMyStocks();
-}
-
-function displayMyStocks() {
-    myStockList.innerHTML = '';
-    myStocks.forEach(stock => {
-        const li = document.createElement('li');
-        li.textContent = `${stock.symbol}: ${stock.shares.toFixed(2)} shares`;
-        myStockList.appendChild(li);
-    });
-}
-
-displayStocks();
-updateBalance();
-populateChartSelector(); // Populate the chart selector
-createChart();
 
 modeToggle.addEventListener('click', function() {
     document.body.classList.toggle('light-mode');
@@ -205,7 +244,15 @@ window.addEventListener('click', function(event) {
     }
 });
 
+// Initialize the app
+displayStocks();
+updateBalance();
+populateChartSelector();
+createChart();
+
+// Update stock prices every second
 setInterval(() => {
     updateStockPrices();
     displayStocks();
+    displayMyStocks();
 }, 1000);
