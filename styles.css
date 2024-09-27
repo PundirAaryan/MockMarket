@@ -1,0 +1,201 @@
+:root {
+    --background-color: #000;
+    --text-color: #f0f0f0;
+    --header-background: #1a1a1a;
+    --button-background: #00bcd4;
+    --button-hover: #00e5ff;
+    --section-background: #1a1a1a;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+.profile-button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #00bcd4;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.profile-button:hover {
+    background-color: #00e5ff;
+    transition: background-color 0.3s ease;
+}
+
+header {
+    background-color: var(--header-background);
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #00bcd4;
+}
+
+.toggle-container {
+    margin-top: 10px;
+}
+
+.toggle-button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #00bcd4;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.toggle-button:hover {
+    background-color: #00e5ff;
+    transition: background-color 0.3s ease;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px;
+    flex-wrap: wrap;
+}
+
+section {
+    background-color: var(--section-background);
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    margin: 10px;
+}
+
+#charts {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+#chart-selector {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--section-background);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    border-radius: 4px;
+}
+
+#stock-chart {
+    width: 100%;
+    height: 400px;
+}
+
+h2 {
+    color: #00bcd4;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #00bcd4;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #00e5ff;
+    transition: background-color 0.3s ease;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--header-background);
+}
+
+body.light-mode {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --header-background: #f0f0f0;
+    --button-background: #2196F3;
+    --button-hover: #42A5F5;
+    --section-background: #f9f9f9;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    color: #f0f0f0;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    section {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    #charts {
+        max-width: 100%;
+    }
+}

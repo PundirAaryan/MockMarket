@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Demo Account</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Stock Trading Demo Account</h1>
+            <div class="profile">
+                <button class="profile-button">User: Aaryan Singh Pundir</button>
+            </div>
+            <div class="toggle-container">
+                <button id="modeToggle" class="toggle-button">Switch to Light Mode</button>
+            </div>
+        </header>
+
+        <main>
+            <section id="stocks" class="section">
+                <h2>Live Stock Prices</h2>
+                <ul id="stock-list"></ul>
+            </section>
+
+            <section id="charts" class="section">
+                <h2>Stock Charts</h2>
+                <select id="chart-selector">
+                    <option value="RELIANCE">RELIANCE</option>
+                    <option value="TCS">TCS</option>
+                    <option value="INFY">INFY</option>
+                </select>
+                <canvas id="stock-chart"></canvas>
+            </section>
+
+            <section id="my-stocks" class="section">
+                <h2>My Stocks</h2>
+                <ul id="my-stock-list"></ul>
+                <button id="sell-button">Sell Stocks</button>
+            </section>
+
+            <section id="wallet" class="section">
+                <h2>Your Wallet</h2>
+                <p id="balance">Balance: ₹100,000</p>
+                <button id="invest-button">Invest</button>
+            </section>
+
+            <section id="profit-loss" class="section">
+                <h2>Profit/Loss</h2>
+                <ul id="profit-loss-list"></ul>
+            </section>
+        </main>
+
+        <footer>
+            © 2024 Demo Trading Platform
+        </footer>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Profile Information</h2>
+            <p>Name: Aaryan Singh Pundir</p>
+            <p>Email: pundir.aaryan@gmail.com</p>
+            <p>Balance: ₹<span id="profile-balance">100,000</span></p>
+            <p>GitHub: <a href="https://github.com/PundirAaryan" target="_blank" style="color: #00bcd4;">github.com/PundirAaryan</a></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
