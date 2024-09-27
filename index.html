@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trading Demo Account</title>
+    <title>Mock Market</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="app">
         <header>
-            <h1>Stock Trading Demo Account</h1>
-            <div class="profile">
-                <button class="profile-button">User: Aaryan Singh Pundir</button>
-            </div>
-            <div class="toggle-container">
+            <h1>Mock Market</h1>
+            <div class="profile-container">
+                <button class="profile-button">Aaryan Singh Pundir</button>
                 <button id="modeToggle" class="toggle-button">Switch to Light Mode</button>
             </div>
         </header>
@@ -27,11 +25,7 @@
 
             <section id="charts" class="section">
                 <h2>Stock Charts</h2>
-                <select id="chart-selector">
-                    <option value="RELIANCE">RELIANCE</option>
-                    <option value="TCS">TCS</option>
-                    <option value="INFY">INFY</option>
-                </select>
+                <select id="chart-selector"></select>
                 <canvas id="stock-chart"></canvas>
             </section>
 
@@ -62,10 +56,10 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Profile Information</h2>
-            <p>Name: Aaryan Singh Pundir</p>
-            <p>Email: pundir.aaryan@gmail.com</p>
-            <p>Balance: ₹<span id="profile-balance">100,000</span></p>
-            <p>GitHub: <a href="https://github.com/PundirAaryan" target="_blank" style="color: #00bcd4;">github.com/PundirAaryan</a></p>
+            <p><strong>Name:</strong> Aaryan Singh Pundir</p>
+            <p><strong>Email:</strong> pundir.aaryan@gmail.com</p>
+            <p><strong>Balance:</strong> ₹<span id="profile-balance">100,000</span></p>
+            <p><strong>GitHub:</strong> <a href="https://github.com/PundirAaryan" target="_blank" rel="noopener noreferrer">github.com/PundirAaryan</a></p>
         </div>
     </div>
 
